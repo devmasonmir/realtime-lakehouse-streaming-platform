@@ -1,0 +1,10 @@
+[
+  {
+    "event_id": "ev_001",
+    "event_type": "ORDER_CREATED",
+    "source_system": "order_svc",
+    "payload": { "order_id": "ord_100", "amount": 250.0 },
+    "timestamp_ms": 1726588800000,
+    "is_deleted": false
+  }
+]
