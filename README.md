@@ -81,7 +81,7 @@ realtime-lakehouse-streaming-platform/
 ## ⚡ Quickstart
 
 ```bash
-git clone https://github.com/masonmirtech/realtime-lakehouse-streaming-platform.git
+git clone https://github.com/devmasonmir/realtime-lakehouse-streaming-platform.git
 cd realtime-lakehouse-streaming-platform
 python -m venv venv
 .\venv\Scripts\activate
