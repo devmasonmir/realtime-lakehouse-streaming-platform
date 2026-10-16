@@ -91,5 +91,21 @@ pytest tests/ -v
 
 ---
 
+## Local batch validation
+
+`process_event_batch` accepts a list of decoded JSON values and returns
+`(valid_events, quarantined)`. Each quarantine entry is `(original_value, errors)`.
+Non-object records (including `null`, arrays, strings, numbers, and booleans) are
+quarantined with `Event must be a JSON object`, so later valid records still run.
+The helper preserves input records and their order within each output group.
+Object checks require non-null required fields and a JSON object payload; this
+helper does not enforce every field type or write quarantine records to storage.
+
+Run the batch-isolation regression tests without Kafka, Spark, or extra packages:
+
+```bash
+python -m unittest discover -s tests -p test_batch_validation.py -v
+```
+
 ## 📜 License
 MIT License.

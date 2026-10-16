@@ -1,11 +1,16 @@
 """In-Stream Data Quality & Schema Contract Validator."""
-from typing import Dict, Any, Tuple, List
+from typing import Any, Tuple, List
+
 
 class StreamDataQualityValidator:
     REQUIRED_FIELDS = ["event_id", "event_type", "source_system", "payload", "timestamp_ms"]
 
     @classmethod
-    def validate_event(cls, event: Dict[str, Any]) -> Tuple[bool, List[str]]:
+    def validate_event(cls, event: Any) -> Tuple[bool, List[str]]:
+        """Validate a decoded JSON value without aborting a batch on non-objects."""
+        if not isinstance(event, dict):
+            return False, ["Event must be a JSON object"]
+
         errors = []
         for field in cls.REQUIRED_FIELDS:
             if field not in event or event[field] is None:
