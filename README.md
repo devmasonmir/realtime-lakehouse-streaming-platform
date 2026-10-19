@@ -98,13 +98,19 @@ pytest tests/ -v
 Non-object records (including `null`, arrays, strings, numbers, and booleans) are
 quarantined with `Event must be a JSON object`, so later valid records still run.
 The helper preserves input records and their order within each output group.
-Object checks require non-null required fields and a JSON object payload; this
-helper does not enforce every field type or write quarantine records to storage.
+Object checks require non-null required fields and a JSON object payload.
+`event_id`, `event_type`, and `source_system` must be non-blank strings.
+`timestamp_ms` must be a non-negative integer (not a boolean, float, or numeric
+string). Optional `is_deleted` must be a boolean when present. Extra fields are
+preserved; payload contents and event type names are not restricted. This helper
+does not write quarantine records to storage.
 
-Run the batch-isolation regression tests without Kafka, Spark, or extra packages:
+Run the batch-isolation and contract regression tests without Kafka, Spark, or
+extra packages:
 
 ```bash
 python -m unittest discover -s tests -p test_batch_validation.py -v
+python -m unittest discover -s tests -p test_event_contract.py -v
 ```
 
 ## 📜 License
