@@ -105,12 +105,34 @@ string). Optional `is_deleted` must be a boolean when present. Extra fields are
 preserved; payload contents and event type names are not restricted. This helper
 does not write quarantine records to storage.
 
+### Offline command-line demo
+
+From the repository root, validate the supplied synthetic sample with Python
+3.10+ and the standard library only (no dependency installation required):
+
+```bash
+python -m src.validate_events sample_data/events.json
+```
+
+The command reads a UTF-8 JSON array and prints a JSON report with `valid_events`
+and `quarantined` arrays to stdout. Each quarantine entry contains the original
+`event` and its `errors`. Logs and input errors go to stderr, so stdout can be
+redirected to a report file. Input files are never modified. Exit codes are `0`
+for an entirely valid batch (including an empty array), `1` when any records are
+quarantined, and `2` for unreadable files, malformed JSON, non-array input, or
+non-finite JSON constants (`NaN`/`Infinity`) or floating-point overflow.
+Invalid input produces no report.
+Use synthetic data: the report includes the original record contents. This is
+an offline contract-validation demo, not a Kafka/Spark or Delta Lake integration
+test; it loads the whole array into memory and does not deduplicate events.
+
 Run the batch-isolation and contract regression tests without Kafka, Spark, or
 extra packages:
 
 ```bash
 python -m unittest discover -s tests -p test_batch_validation.py -v
 python -m unittest discover -s tests -p test_event_contract.py -v
+python -m unittest discover -s tests -p test_validation_cli.py -v
 ```
 
 ## 📜 License
