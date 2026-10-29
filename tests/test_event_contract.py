@@ -107,6 +107,19 @@ class EventContractTests(unittest.TestCase):
         self.assertIs(quarantined[0][0], duplicate)
         self.assertEqual(events, original)
 
+    def test_every_later_duplicate_is_quarantined_in_order(self):
+        first = {**self.event, "payload": {"sequence": 1}}
+        second = {**self.event, "payload": {"sequence": 2}}
+        third = {**self.event, "payload": {"sequence": 3}}
+
+        valid, quarantined = process_event_batch([first, second, third])
+
+        self.assertEqual(valid, [first])
+        self.assertEqual(quarantined, [
+            (second, ["Duplicate event_id in batch"]),
+            (third, ["Duplicate event_id in batch"]),
+        ])
+
     def test_invalid_record_does_not_reserve_its_event_id(self):
         invalid = {**self.event, "payload": []}
 
@@ -116,7 +129,6 @@ class EventContractTests(unittest.TestCase):
         self.assertEqual(quarantined, [
             (invalid, ["Payload must be a JSON object"]),
         ])
-
 
 
 if __name__ == "__main__":
