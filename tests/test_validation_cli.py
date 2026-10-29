@@ -53,6 +53,25 @@ class ValidationCliTests(unittest.TestCase):
             ],
         })
 
+    def test_duplicate_event_ids_are_reported(self):
+        event = {
+            "event_id": "synthetic_1", "event_type": "CREATE",
+            "source_system": "synthetic_source", "payload": {},
+            "timestamp_ms": 0,
+        }
+        duplicate = {**event, "payload": {"sequence": 2}}
+
+        result = self.run_document(json.dumps([event, duplicate]))
+
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertEqual(json.loads(result.stdout), {
+            "valid_events": [event],
+            "quarantined": [{
+                "event": duplicate,
+                "errors": ["Duplicate event_id in batch"],
+            }],
+        })
+
     def test_empty_batch_succeeds(self):
         result = self.run_document("[]")
         self.assertEqual(result.returncode, 0, result.stderr)

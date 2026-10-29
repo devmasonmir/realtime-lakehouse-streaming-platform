@@ -98,6 +98,9 @@ pytest tests/ -v
 Non-object records (including `null`, arrays, strings, numbers, and booleans) are
 quarantined with `Event must be a JSON object`, so later valid records still run.
 The helper preserves input records and their order within each output group.
+The first valid occurrence of an `event_id` is accepted; later valid records
+with the same ID in that batch are quarantined as duplicates. An invalid record
+does not reserve its ID, so a later valid record can still be accepted.
 Object checks require non-null required fields and a JSON object payload.
 `event_id`, `event_type`, and `source_system` must be non-blank strings.
 `timestamp_ms` must be a non-negative integer (not a boolean, float, or numeric
@@ -124,7 +127,8 @@ non-finite JSON constants (`NaN`/`Infinity`) or floating-point overflow.
 Invalid input produces no report.
 Use synthetic data: the report includes the original record contents. This is
 an offline contract-validation demo, not a Kafka/Spark or Delta Lake integration
-test; it loads the whole array into memory and does not deduplicate events.
+test; it loads the whole array into memory. Duplicate detection is limited to
+one call and does not maintain state across files or streaming micro-batches.
 
 Run the batch-isolation and contract regression tests without Kafka, Spark, or
 extra packages:
