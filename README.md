@@ -55,8 +55,8 @@ flowchart LR
 
 ```
 realtime-lakehouse-streaming-platform/
-├── ci/
-│   └── ci.yml                 # CI testing pipeline
+├── .github/workflows/
+│   └── ci.yml                 # GitHub Actions regression workflow
 ├── dags/
 │   └── lakehouse_maintenance_dag.py # Airflow Delta compaction DAG
 ├── docs/
@@ -86,7 +86,7 @@ cd realtime-lakehouse-streaming-platform
 python -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
-pytest tests/ -v
+python -m unittest discover -s tests -v
 ```
 
 ---

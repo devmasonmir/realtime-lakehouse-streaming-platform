@@ -1,15 +1,29 @@
-import pytest
+"""Dependency-free smoke tests for generated CDC events."""
+import unittest
+
 from src.data_quality import StreamDataQualityValidator
 from src.cdc_producer import generate_cdc_event
 
-def test_valid_event():
-    ev = generate_cdc_event("ord_101")
-    is_valid, errors = StreamDataQualityValidator.validate_event(ev)
-    assert is_valid is True
-    assert len(errors) == 0
 
-def test_invalid_event():
-    ev = {"event_id": "bad_event"}
-    is_valid, errors = StreamDataQualityValidator.validate_event(ev)
-    assert is_valid is False
-    assert any("Missing required field" in err for err in errors)
+class StreamingSmokeTests(unittest.TestCase):
+    def test_generated_event_is_valid(self):
+        event = generate_cdc_event("synthetic_order_101")
+
+        is_valid, errors = StreamDataQualityValidator.validate_event(event)
+
+        self.assertTrue(is_valid)
+        self.assertEqual(errors, [])
+
+    def test_incomplete_event_is_invalid(self):
+        event = {"event_id": "synthetic_incomplete_event"}
+
+        is_valid, errors = StreamDataQualityValidator.validate_event(event)
+
+        self.assertFalse(is_valid)
+        self.assertTrue(any(
+            "Missing required field" in error for error in errors
+        ))
+
+
+if __name__ == "__main__":
+    unittest.main()

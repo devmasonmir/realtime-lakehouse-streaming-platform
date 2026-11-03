@@ -41,10 +41,11 @@ class ValidationCliTests(unittest.TestCase):
             "timestamp_ms": 0,
         }
         invalid = {**event, "timestamp_ms": True}
-        result = self.run_document(json.dumps([None, event, invalid, event]))
+        distinct = {**event, "event_id": "synthetic_2"}
+        result = self.run_document(json.dumps([None, event, invalid, distinct]))
         self.assertEqual(result.returncode, 1, result.stderr)
         self.assertEqual(json.loads(result.stdout), {
-            "valid_events": [event, event],
+            "valid_events": [event, distinct],
             "quarantined": [
                 {"event": None, "errors": ["Event must be a JSON object"]},
                 {"event": invalid, "errors": [
