@@ -1,4 +1,6 @@
-# Real-Time Data Streaming & Lakehouse Platform
+# Real-Time Data Streaming and Lakehouse Platform
+
+> Streaming portfolio project aligned with Mason A. Mir's resume. The implementation and tests demonstrate selected Kafka/CDC validation and lakehouse patterns using synthetic data; cloud architecture is illustrative.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
