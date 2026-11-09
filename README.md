@@ -7,7 +7,7 @@
 [![Delta Lake](https://img.shields.io/badge/Delta_Lake-3.0-00ADD8.svg)](https://delta.io/)
 [![Databricks](https://img.shields.io/badge/Databricks-Lakehouse-FF3621.svg)](https://databricks.com/)
 
-> **High-throughput enterprise streaming platform leveraging Apache Kafka, PySpark Structured Streaming, and Databricks Delta Lake with CDC ingestion patterns, ACID transactions, automated data quality validation, and Airflow orchestration.**
+> **Portfolio reference architecture and code examples** illustrating Kafka/CDC event ingestion, PySpark Structured Streaming, Delta Lake medallion layers, data contracts, and orchestration patterns. The included offline validation helpers and synthetic tests do not establish a deployed high-throughput production system.
 
 ---
 
@@ -47,7 +47,7 @@ flowchart LR
 * **Medallion Lakehouse Architecture**: Bronze (raw append-only), Silver (schema enforcement & deduplicated records), and Gold (pre-computed dimensional aggregations).
 * **Fault-Tolerant Checkpointing**: End-to-end exactly-once processing semantics backed by Delta Lake transaction logs.
 * **Automated Data Quality Validation**: In-stream schema drift detection, null constraint validation, and quarantine routing.
-* **Databricks Workflows & Airflow Orchestration**: Scheduled optimization jobs (`OPTIMIZE` + `ZORDER`) maintaining sub-second query performance.
+* **Databricks Workflows & Airflow Orchestration Design**: Illustrative maintenance scheduling patterns; no sub-second production performance benchmark is provided.
 
 ---
 
@@ -139,5 +139,6 @@ python -m unittest discover -s tests -p test_event_contract.py -v
 python -m unittest discover -s tests -p test_validation_cli.py -v
 ```
 
-## 📜 License
-MIT License.
+## Scope and licensing
+
+Independent portfolio reference implementation using synthetic inputs. Architecture diagrams may show components beyond the locally executed tests. No license file is currently included.
