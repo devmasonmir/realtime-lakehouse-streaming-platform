@@ -99,8 +99,10 @@ Non-object records (including `null`, arrays, strings, numbers, and booleans) ar
 quarantined with `Event must be a JSON object`, so later valid records still run.
 The helper preserves input records and their order within each output group.
 The first valid occurrence of an `event_id` is accepted; later valid records
-with the same ID in that batch are quarantined as duplicates. An invalid record
-does not reserve its ID, so a later valid record can still be accepted.
+with the same ID in that batch are quarantined as duplicates. Surrounding
+whitespace is ignored for duplicate comparison without modifying the original
+events. An invalid record does not reserve its ID, so a later valid record can
+still be accepted.
 Object checks require non-null required fields and a JSON object payload.
 `event_id`, `event_type`, and `source_system` must be non-blank strings.
 `timestamp_ms` must be a non-negative integer (not a boolean, float, or numeric

@@ -12,13 +12,14 @@ def process_event_batch(events: list):
     accepted_event_ids = set()
     for ev in events:
         is_valid, errs = StreamDataQualityValidator.validate_event(ev)
-        if is_valid and ev["event_id"] in accepted_event_ids:
+        event_id_key = ev["event_id"].strip() if is_valid else None
+        if is_valid and event_id_key in accepted_event_ids:
             is_valid = False
             errs = ["Duplicate event_id in batch"]
 
         if is_valid:
             valid_events.append(ev)
-            accepted_event_ids.add(ev["event_id"])
+            accepted_event_ids.add(event_id_key)
         else:
             quarantined.append((ev, errs))
     logger.info("Batch summary: Valid=" + str(len(valid_events)) + " | Quarantined=" + str(len(quarantined)))

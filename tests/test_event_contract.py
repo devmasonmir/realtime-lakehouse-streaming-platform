@@ -120,6 +120,24 @@ class EventContractTests(unittest.TestCase):
             (third, ["Duplicate event_id in batch"]),
         ])
 
+    def test_duplicate_detection_normalizes_surrounding_whitespace(self):
+        first = {**self.event, "payload": {"sequence": 1}}
+        duplicate = {
+            **self.event,
+            "event_id": "  synthetic_event_1\t",
+            "payload": {"sequence": 2},
+        }
+        events = [first, duplicate]
+        original = copy.deepcopy(events)
+
+        valid, quarantined = process_event_batch(events)
+
+        self.assertEqual(valid, [first])
+        self.assertEqual(quarantined, [
+            (duplicate, ["Duplicate event_id in batch"]),
+        ])
+        self.assertEqual(events, original)
+
     def test_invalid_record_does_not_reserve_its_event_id(self):
         invalid = {**self.event, "payload": []}
 
